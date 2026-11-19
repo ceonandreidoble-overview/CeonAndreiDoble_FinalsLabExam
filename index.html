@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leveling Fitness</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg sticky-top">
+<div class="container">
+<a class="navbar-brand" href="#" onclick="showPage('home')">✿ LEVELING FITNESS</a>
+<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+<span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="nav">
+<ul class="navbar-nav ms-auto">
+<li class="nav-item"><a class="nav-link active" href="#" onclick="showPage('home')">Dashboard</a></li>
+<li class="nav-item"><a class="nav-link" href="#" onclick="showPage('quests')">Quests</a></li>
+<li class="nav-item"><a class="nav-link" href="#" onclick="showPage('profile')">My Profile</a></li>
+</ul>
+</div>
+</div>
+</nav>
+
+<main class="container py-4">
+
+<section id="home" class="page active">
+<div class="hero mb-4">
+<span class="eyebrow">✧ YOUR FITNESS JOURNEY ✧</span>
+<h1>Welcome back,<br><span id="welcomeName">Player!</span></h1>
+<p>Every little effort counts. Complete your quests, collect XP, and become your best self.</p>
+<button class="btn pink-btn" onclick="showPage('quests')">✿ Explore Quests</button>
+<div class="hero-flower">🌸</div>
+</div>
+
+<div class="section-heading">
+<div>
+<span class="eyebrow">YOUR PROGRESS</span>
+<h2>Player Dashboard</h2>
+</div>
+<span class="cute-badge">✧ Keep growing ✧</span>
+</div>
+
+<div class="row g-3 mb-4">
+<div class="col-md-4">
+<div class="stat-card">
+<div class="stat-icon">⭐</div>
+<span class="stat-label">CURRENT LEVEL</span>
+<h2 id="lvl">1</h2>
+<small>Your journey starts here!</small>
+</div>
+</div>
+<div class="col-md-4">
+<div class="stat-card">
+<div class="stat-icon">🏆</div>
+<span class="stat-label">CURRENT RANK</span>
+<h2 id="rank">E</h2>
+<small>Your hunter ranking</small>
+</div>
+</div>
+<div class="col-md-4">
+<div class="stat-card">
+<div class="stat-icon">✨</div>
+<span class="stat-label">TOTAL XP</span>
+<h2 id="totalXp">0</h2>
+<small>Experience collected</small>
+</div>
+</div>
+</div>
+
+<div class="row g-3">
+<div class="col-lg-5">
+<div class="content-card h-100">
+<h3>Status Window 💗</h3>
+<p>Name: <strong id="hunterName">Unregistered</strong></p>
+<div class="d-flex justify-content-between">
+<strong>Experience Progress</strong>
+<span id="xpText">0 / 100 XP</span>
+</div>
+<div class="progress custom-progress mt-2">
+<div id="xpbar" class="progress-bar"></div>
+</div>
+<div class="mini-stats">
+<div><strong id="doneCount">0</strong><small>Quests Cleared</small></div>
+<div><strong id="profileGoal">Not set</strong><small>Fitness Goal</small></div>
+</div>
+</div>
+</div>
+<div class="col-lg-7">
+<div class="content-card h-100">
+<h3>Today's Pending Quests 🌷</h3>
+<ul id="previewList" class="list-group quest-preview"></ul>
+<button class="btn outline-pink w-100 mt-3" onclick="showPage('quests')">View All Quests →</button>
+</div>
+</div>
+</div>
+
+<div class="motivation-card mt-4">
+<h3>🌸 Small Steps, Big Achievements!</h3>
+<p>Believe in yourself. Your progress is worth celebrating.</p>
+</div>
+</section>
+
+<section id="quests" class="page">
+<div class="page-banner mb-4">
+<span class="eyebrow">✧ YOUR DAILY CHALLENGES ✧</span>
+<h1>Quest Board 🌸</h1>
+<p>Complete your quests and earn experience points!</p>
+</div>
+
+<div id="toast" class="alert pink-alert d-none"></div>
+
+<div class="content-card mb-4">
+<div class="row g-3 align-items-end">
+<div class="col-md-5">
+<label class="form-label">Search Quests</label>
+<input id="search" class="form-control" placeholder="Search quests..." oninput="renderQuests()">
+</div>
+<div class="col-md-3">
+<label class="form-label">Category</label>
+<select id="filter" class="form-select" onchange="renderQuests()">
+<option value="All">All Categories</option>
+</select>
+</div>
+<div class="col-md-3">
+<label class="form-label">Sort By</label>
+<select id="sort" class="form-select" onchange="renderQuests()">
+<option value="id">Default</option>
+<option value="xp">Highest XP</option>
+<option value="title">Name A-Z</option>
+</select>
+</div>
+<div class="col-md-1">
+<button class="btn reset-btn" onclick="resetProgress()">↻</button>
+</div>
+</div>
+</div>
+
+<div class="row g-4">
+<div class="col-lg-7">
+<div class="content-card">
+<h3>Available Quests 🎀</h3>
+<ul id="questList" class="list-group quest-list"></ul>
+</div>
+</div>
+<div class="col-lg-5">
+<div class="content-card">
+<h3>Add Custom Quest 🌷</h3>
+<form id="questForm">
+<div class="mb-3">
+<label class="form-label">Quest Name</label>
+<input id="qTitle" class="form-control" minlength="3" maxlength="40" required>
+</div>
+<div class="mb-3">
+<label class="form-label">Category</label>
+<select id="qCat" class="form-select" required>
+<option value="">Choose Category</option>
+<option>Strength</option>
+<option>Cardio</option>
+<option>Core</option>
+<option>Legs</option>
+<option>Recovery</option>
+</select>
+</div>
+<div class="mb-3">
+<label class="form-label">XP Reward (5–100)</label>
+<input id="qXp" type="number" class="form-control" min="5" max="100" required>
+</div>
+<button class="btn pink-btn w-100">+ Add Quest</button>
+</form>
+</div>
+</div>
+</div>
+</section>
+
+<section id="profile" class="page">
+<div class="page-banner mb-4">
+<span class="eyebrow">✧ YOUR PERSONAL SPACE ✧</span>
+<h1>Hunter Profile 🌷</h1>
+<p>Customize your player information and fitness goals.</p>
+</div>
+
+<div class="row g-4">
+<div class="col-lg-6">
+<div class="content-card">
+<h3>Edit Profile 💗</h3>
+<form id="profileForm">
+<div class="mb-3">
+<label class="form-label">Hunter Name</label>
+<input id="pName" class="form-control" minlength="2" maxlength="20" required>
+</div>
+<div class="mb-3">
+<label class="form-label">Age</label>
+<input id="pAge" type="number" class="form-control" min="13" max="80" required>
+</div>
+<div class="mb-3">
+<label class="form-label">Fitness Goal</label>
+<select id="pGoal" class="form-select" required>
+<option value="">Choose your goal</option>
+<option>Build strength</option>
+<option>Improve endurance</option>
+<option>Improve flexibility</option>
+<option>Stay active and healthy</option>
+</select>
+</div>
+<div class="mb-3">
+<label class="form-label">Activity Focus</label>
+<select id="pFocus" class="form-select" required>
+<option value="">Choose your focus</option>
+<option>Full Body</option>
+<option>Upper Body</option>
+<option>Lower Body</option>
+<option>Cardio</option>
+<option>Balanced Fitness</option>
+</select>
+</div>
+<button class="btn pink-btn w-100">✿ Save Profile</button>
+</form>
+</div>
+</div>
+
+<div class="col-lg-6">
+<div class="content-card profile-preview">
+<div class="big-avatar">🌸</div>
+<span class="eyebrow">YOUR HUNTER CARD</span>
+<h2 id="profileName">Unregistered Player</h2>
+<span class="cute-badge">✧ Active Player ✧</span>
+<hr>
+<div class="profile-detail"><span>Age</span><strong id="profileAge">Not set</strong></div>
+<div class="profile-detail"><span>Fitness Goal</span><strong id="profileGoalCard">Not set</strong></div>
+<div class="profile-detail"><span>Activity Focus</span><strong id="profileFocus">Not set</strong></div>
+<div class="profile-detail"><span>Level</span><strong id="profileLevel">1</strong></div>
+<div class="profile-detail"><span>Rank</span><strong id="profileRank">E</strong></div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer>
+<p>✿ LEVELING FITNESS ✿</p>
+<small>Your personal fitness adventure.</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
